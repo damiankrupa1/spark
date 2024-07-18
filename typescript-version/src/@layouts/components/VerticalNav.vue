@@ -56,7 +56,7 @@ const handleNavScroll = (evt: Event) => {
     <div class="nav-header">
       <slot name="nav-header">
         <RouterLink
-          to="/"
+          to="/account-settings"
           class="app-logo app-title-wrapper"
         >
           <div
@@ -65,7 +65,7 @@ const handleNavScroll = (evt: Event) => {
           />
 
           <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-            Materio
+            LuxSoftware
           </h1>
         </RouterLink>
       </slot>

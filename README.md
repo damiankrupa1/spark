@@ -8,7 +8,7 @@
 
 <h1 align="center">
    <a href="https://themeselection.com/item/materio-free-vuetify-vuejs-admin-template/" target="_blank" align="center">
- Materio – Vuetify Vuejs Admin Template Free
+ LuxSoftware – Vuetify Vuejs Admin Template Free
    </a>
 </h1>
 
@@ -27,11 +27,11 @@
    </a>
 </p>
 
-<kbd>[![Materio – Vuetify Vuejs Admin Template Demo Screenshot](https://cdn.themeselection.com/ts-assets/materio/materio-vuetify-vuejs-admin-template-free/banner/banner.png)](https://themeselection.com/item/materio-free-vuetify-vuejs-admin-template/)</kbd>
+<kbd>[![LuxSoftware – Vuetify Vuejs Admin Template Demo Screenshot](https://cdn.themeselection.com/ts-assets/materio/materio-vuetify-vuejs-admin-template-free/banner/banner.png)](https://themeselection.com/item/materio-free-vuetify-vuejs-admin-template/)</kbd>
 
 ## Introduction 🚀
 
-If you're a developer looking for an admin dashboard that is developer-friendly, rich with features, and highly customizable look no further than Materio. We've followed the highest industry standards to bring you the very best [Vue Admin Template](https://themeselection.com/item/category/vuejs-admin-templates/) that is not only fast and easy to use but highly scalable. Offering ultimate convenience and flexibility, you'll be able to build whatever application you want with very little hassle.
+If you're a developer looking for an admin dashboard that is developer-friendly, rich with features, and highly customizable look no further than LuxSoftware. We've followed the highest industry standards to bring you the very best [Vue Admin Template](https://themeselection.com/item/category/vuejs-admin-templates/) that is not only fast and easy to use but highly scalable. Offering ultimate convenience and flexibility, you'll be able to build whatever application you want with very little hassle.
 
 - ⚡️ [Vue 3](https://github.com/vuejs/core), [Vite 3](https://github.com/vitejs/vite) & [Vuetify 3](https://next.vuetifyjs.com/en/) - Uses the latest Vuetify 3
 - 🗂 [File based routing](https://github.com/hannoeru/vite-plugin-pages)
@@ -71,7 +71,7 @@ Please [visit](https://demos.themeselection.com/materio-vuetify-vuejs-admin-temp
 
 ## What's in Premium Version 💎
 
-| Materio Free Version                                                                             | Materio Premium Version                                                                        |
+| LuxSoftware Free Version                                                                             | LuxSoftware Premium Version                                                                        |
 | ------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------- |
 | [Demo](https://demos.themeselection.com/materio-vuetify-vuejs-admin-template-free/demo/dashboard)          | [Demo](https://themeselection.com/item/materio-free-vuetify-vuejs-admin-template/?tab=details#details)           |
 | [Download](https://themeselection.com/item/materio-free-vuetify-vuejs-admin-template/)        | [Purchase](https://themeselection.com/item/materio-vuetify-vuejs-admin-template/)           |
@@ -178,7 +178,7 @@ For free products, enjoy community support via GitHub issues. Upgrade to Premium
 - [ASP.Net Core Admin Templates](https://themeselection.com/item/category/asp-net-dashboard/)
 - [Free UI Kits](https://themeselection.com/products/category/free-ui-kits/) 
 
-If you want to [Download Free Admin Templates](https://themeselection.com/item/category/download-free-admin-templates/) like Materio then do visit [ThemeSelection](https://themeselection.com/).
+If you want to [Download Free Admin Templates](https://themeselection.com/item/category/download-free-admin-templates/) like LuxSoftware then do visit [ThemeSelection](https://themeselection.com/).
 
 ## Useful Links 🎁
 
