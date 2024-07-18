@@ -8,12 +8,24 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, sameAs } from '@vuelidate/validators'
+
 const form = ref({
   username: '',
   email: '',
   password: '',
   privacyPolicies: false,
 })
+
+const rules = {
+  username: { required },
+  email: { required, email },
+  password: { required },
+  privacyPolicies: sameAs(true),
+}
+
+const v$ = useVuelidate(rules, form.value)
 
 const vuetifyTheme = useTheme()
 
@@ -23,13 +35,29 @@ const authThemeMask = computed(() => {
     : authV1MaskDark
 })
 
+const userNameErrors = computed(() => {
+  const errors = v$.value.username.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+
 const isPasswordVisible = ref(false)
+
+const handleSubmit = async () => {
+  const res = await fetch("http://localhost:3000/v1/auth/register",{
+    method: 'POST',
+    body: JSON.stringify(form.value)
+  });
+}
 </script>
 
 <template>
   <!-- eslint-disable vue/no-v-html -->
 
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
+    <!-- {{ v$ }} -->
     <VCard
       class="auth-card pa-4 pt-7"
       max-width="448"
@@ -56,7 +84,7 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm @submit.prevent="handleSubmit">
           <VRow>
             <!-- Username -->
             <VCol cols="12">
@@ -64,6 +92,9 @@ const isPasswordVisible = ref(false)
                 v-model="form.username"
                 label="Username"
                 placeholder="Johndoe"
+                :error-messages="userNameErrors"
+                @blur="v$.username.$touch"
+                @input="v$.username.$touch"
               />
             </VCol>
             <!-- email -->
@@ -107,7 +138,6 @@ const isPasswordVisible = ref(false)
               <VBtn
                 block
                 type="submit"
-                to="/"
               >
                 Sign up
               </VBtn>
