@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
+import { useTheme } from 'vuetify'
 
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
-import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
-import authV1Tree from '@images/pages/auth-v1-tree.png'
 
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, sameAs } from '@vuelidate/validators'
+import { email, required, sameAs } from '@vuelidate/validators'
 
 const form = ref({
   username: '',
@@ -46,6 +44,10 @@ const userNameErrors = computed(() => {
 const isPasswordVisible = ref(false)
 
 const handleSubmit = async () => {
+  v$.value.$touch();
+  if(v$.value.$invalid){
+    return;
+  }
   const res = await fetch("http://localhost:3000/v1/auth/register",{
     method: 'POST',
     body: JSON.stringify(form.value)
@@ -57,7 +59,10 @@ const handleSubmit = async () => {
   <!-- eslint-disable vue/no-v-html -->
 
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
-    <!-- {{ v$ }} -->
+
+    <!--<VCTextField> 
+      <template #prepend="{id, reset}">asdf : {{ id }} {{  reset }}</template>
+    </VCTextField>-->
     <VCard
       class="auth-card pa-4 pt-7"
       max-width="448"
@@ -79,35 +84,29 @@ const handleSubmit = async () => {
           Adventure starts here 🚀
         </h5>
         <p class="mb-0">
-          Make your app management easy and fun!
+          Make your life management easy and fun!
         </p>
       </VCardText>
 
       <VCardText>
         <VForm @submit.prevent="handleSubmit">
           <VRow>
-            <!-- Username -->
             <VCol cols="12">
               <VTextField
                 v-model="form.username"
                 label="Username"
-                placeholder="Johndoe"
                 :error-messages="userNameErrors"
                 @blur="v$.username.$touch"
                 @input="v$.username.$touch"
               />
             </VCol>
-            <!-- email -->
             <VCol cols="12">
               <VTextField
                 v-model="form.email"
                 label="Email"
-                placeholder="johndoe@email.com"
                 type="email"
               />
             </VCol>
-
-            <!-- password -->
             <VCol cols="12">
               <VTextField
                 v-model="form.password"
@@ -143,7 +142,6 @@ const handleSubmit = async () => {
               </VBtn>
             </VCol>
 
-            <!-- login instead -->
             <VCol
               cols="12"
               class="text-center text-base"
@@ -177,24 +175,6 @@ const handleSubmit = async () => {
         </VForm>
       </VCardText>
     </VCard>
-
-    <VImg
-      class="auth-footer-start-tree d-none d-md-block"
-      :src="authV1Tree"
-      :width="250"
-    />
-
-    <VImg
-      :src="authV1Tree2"
-      class="auth-footer-end-tree d-none d-md-block"
-      :width="350"
-    />
-
-    <!-- bg img -->
-    <VImg
-      class="auth-footer-mask d-none d-md-block"
-      :src="authThemeMask"
-    />
   </div>
 </template>
 
