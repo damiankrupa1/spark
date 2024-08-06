@@ -92,7 +92,7 @@ const handleSubmit = async () => {
         <VForm @submit.prevent="handleSubmit">
           <VRow>
             <VCol cols="12">
-              <VTextField
+              <VCTextField
                 v-model="form.username"
                 label="Username"
                 :error-messages="userNameErrors"
