@@ -8,6 +8,7 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 
 import { useVuelidate } from '@vuelidate/core'
 import { email, required, sameAs } from '@vuelidate/validators'
+import { getCurrentInstance } from 'vue'
 
 const form = ref({
   username: '',
@@ -22,6 +23,10 @@ const rules = {
   password: { required },
   privacyPolicies: sameAs(true),
 }
+
+
+const app = getCurrentInstance()
+const axios = app!.appContext.config.globalProperties.$axios
 
 const v$ = useVuelidate(rules, form.value)
 
@@ -44,14 +49,18 @@ const userNameErrors = computed(() => {
 const isPasswordVisible = ref(false)
 
 const handleSubmit = async () => {
-  v$.value.$touch();
-  if(v$.value.$invalid){
-    return;
-  }
-  const res = await fetch("http://localhost:3000/v1/auth/register",{
-    method: 'POST',
-    body: JSON.stringify(form.value)
-  });
+  // v$.value.$touch();
+  // if(v$.value.$invalid){
+  //   return;
+  // }
+
+  const res = axios.post("http://localhost:3000/v1/auth/register",form.value)
+
+
+  // const res = await fetch("http://localhost:3000/v1/auth/register",{
+  //   method: 'POST',
+  //   body: JSON.stringify(form.value)
+  // });
 }
 </script>
 
@@ -59,10 +68,6 @@ const handleSubmit = async () => {
   <!-- eslint-disable vue/no-v-html -->
 
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
-
-    <!--<VCTextField> 
-      <template #prepend="{id, reset}">asdf : {{ id }} {{  reset }}</template>
-    </VCTextField>-->
     <VCard
       class="auth-card pa-4 pt-7"
       max-width="448"

@@ -1,8 +1,13 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
+import { toast, type ToastOptions } from 'vue3-toastify';
 
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders
 }
+const toastOptions = {
+  autoClose: 1000,
+  position: toast.POSITION.BOTTOM_RIGHT,
+} as ToastOptions
 const instance = axios.create({
   baseURL: 'http://localhost:3000',
 });
@@ -17,9 +22,13 @@ instance.interceptors.request.use(
 });
 
 instance.interceptors.response.use(
-  response => response,
+  response => {
+    toast("Success", toastOptions);
+    return response;
+  },
   error => {
     if (error.response) {
+      toast("Error!", toastOptions);
       if (error.response.status === 401) {
         // Redirect to login page
       } else if (error.response.status === 404) {
