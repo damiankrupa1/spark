@@ -1,11 +1,12 @@
-import { createApp } from 'vue'
+import { createApp } from 'vue';
 
-import App from '@/App.vue'
-import { registerPlugins } from '@core/utils/plugins'
+import App from '@/App.vue';
+import { registerPlugins } from '@core/utils/plugins';
+import 'vue3-toastify/dist/index.css';
 
 // Styles
-import '@core/scss/template/index.scss'
-import '@layouts/styles/index.scss'
+import '@core/scss/template/index.scss';
+import '@layouts/styles/index.scss';
 
 // Create vue app
 const app = createApp(App)
