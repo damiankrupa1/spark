@@ -3,6 +3,7 @@
 
 <template>
   <VApp>
+    <notifications />
     <RouterView />
   </VApp>
 </template>

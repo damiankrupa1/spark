@@ -15,6 +15,7 @@
   "dependencies": {
     "@floating-ui/dom": "1.5.3",
     "@iconify-json/bxl": "^1.1.10",
+    "@kyvg/vue3-notification": "^3.2.1",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.5.0",

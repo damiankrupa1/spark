@@ -1,20 +1,21 @@
 import { router } from "@/plugins/router/index";
+import { useNotification } from "@kyvg/vue3-notification";
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 import type { App } from 'vue';
-import { toast, type ToastOptions } from 'vue3-toastify';
+
+const { notify }  = useNotification();
+
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders
 }
-const toastOptions = {
-  autoClose: 1000,
-  position: toast.POSITION.BOTTOM_RIGHT,
-} as ToastOptions
+
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000',
 });
 
 axiosInstance.interceptors.request.use(
   (config): AdaptAxiosRequestConfig => {
+    console.log('here',config)
     const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -27,13 +28,23 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   response => {
-    toast("Success", toastOptions);
+    console.log('here',response)
+
+    notify({
+      title: "Success",
+    })
     return response;
   },
   error => {
+    // console.log('here',error)
+    console.log(error)
+    console.log(error.AxiosError )
+    console.log(error.message)
+    notify({
+      title: "Error!",
+      text: error.message,
+    })
     if (error.response) {
-      console.log(error.response)
-      toast("Error!", toastOptions);
       if (error.response.status === 401) {
         router.push({path: 'login'})
       } else if (error.response.status === 404) {
