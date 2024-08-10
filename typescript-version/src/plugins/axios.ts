@@ -32,6 +32,7 @@ axiosInstance.interceptors.response.use(
 
     notify({
       title: "Success",
+      type: "success"
     })
     return response;
   },
@@ -40,6 +41,7 @@ axiosInstance.interceptors.response.use(
     notify({
       title: "Error!",
       text: error.message,
+      type: "error"
     })
     if (error.response) {
       if (error.response.status === 401) {
