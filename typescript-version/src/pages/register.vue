@@ -50,27 +50,31 @@ const emailErrors = computed(() => {
 const isPasswordVisible = ref(false)
 
 const handleSubmit = async () => {
+  console.log('submit')
   v$.value.$touch();
   if(v$.value.$invalid){
     return;
   }
 
-  // const res = axiosInstance.post("http://localhost:3000/v1/auth/register",form.value)
-  console.log({...form.value})
   try{
     const response = await auth.register({
       body: form.value,
-      baseURL: 'http://localhost:3000',
       url: '/v1/auth/register',
       data: {...form.value},
-      redirect: { name: "account-settings" },
-      remember: true,
-      staySignedIn: true,
-      autoLogin: true,
-      fetchUser: true,
+      redirect: false,
+      // redirect: { name: "account-settings" },
+      // remember: true,
+      // staySignedIn: true,
+      // autoLogin: true,
+      // fetchUser: false,
+    })
+    console.log('response',response)
+    notify({
+      title: "Error!",
+      text: response?.data?.message ?? '',
+      type: "error"
     })
   } catch(error){
-    console.log(error)
     notify({
       title: "Error!",
       text: error?.response?.data?.message ?? error.message,
