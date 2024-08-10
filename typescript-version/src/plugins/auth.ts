@@ -11,11 +11,11 @@ driverAuthBasic.request = (auth, options, token) => {
 }
 
 driverAuthBasic.response = (_, { data }) => {
+  //todo add notify
   return data?.tokens?.access?.token
 }
 
 driverHttpAxios.request = async ({...args}) => {
-  console.log('args', args)
   args.baseURL = 'http://localhost:3000';
   return {...args.data,...args};
 }

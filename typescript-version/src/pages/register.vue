@@ -50,7 +50,6 @@ const emailErrors = computed(() => {
 const isPasswordVisible = ref(false)
 
 const handleSubmit = async () => {
-  console.log('submit')
   v$.value.$touch();
   if(v$.value.$invalid){
     return;
@@ -61,18 +60,16 @@ const handleSubmit = async () => {
       body: form.value,
       url: '/v1/auth/register',
       data: {...form.value},
-      redirect: false,
-      // redirect: { name: "account-settings" },
-      // remember: true,
-      // staySignedIn: true,
-      // autoLogin: true,
-      // fetchUser: false,
+      redirect: { path: "dashboard" },
+      staySignedIn: true,
+      autoLogin: true,
+      fetchUser: false,
     })
     console.log('response',response)
     notify({
-      title: "Error!",
-      text: response?.data?.message ?? '',
-      type: "error"
+      title: "Success",
+      text: "Register successful",
+      type: "success"
     })
   } catch(error){
     notify({
