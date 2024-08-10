@@ -1,4 +1,4 @@
-import router from "@/plugins/router/index";
+import { router } from "@/plugins/router/index";
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 import type { App } from 'vue';
 import { toast, type ToastOptions } from 'vue3-toastify';
