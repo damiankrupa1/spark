@@ -36,10 +36,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   error => {
-    // console.log('here',error)
-    console.log(error)
-    console.log(error.AxiosError )
-    console.log(error.message)
+
     notify({
       title: "Error!",
       text: error.message,

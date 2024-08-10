@@ -1,43 +1,27 @@
 <script setup lang="ts">
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { useTheme } from 'vuetify'
-
 import logo from '@images/logo.svg?raw'
-import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
-import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 
 import { axiosInstance } from '@/plugins/axios'
 import { useVuelidate } from '@vuelidate/core'
 import { email, required } from '@vuelidate/validators'
-import { getCurrentInstance } from 'vue'
 
 const form = ref({
-  username: '',
+  name: '',
   email: '',
   password: '',
 })
 
 const rules = {
-  username: { required },
+  name: { required },
   email: { required, email },
   password: { required },
 }
 
-
-const app = getCurrentInstance()
-
 const v$ = useVuelidate(rules, form.value)
 
-const vuetifyTheme = useTheme()
-
-const authThemeMask = computed(() => {
-  return vuetifyTheme.global.name.value === 'light'
-    ? authV1MaskLight
-    : authV1MaskDark
-})
-
 const userNameErrors = computed(() => {
-  const errors = v$.value.username.$errors;
+  const errors = v$.value.name.$errors;
   if(!Array.isArray(errors)){
     return [];
   }
@@ -105,11 +89,11 @@ const handleSubmit = async () => {
           <VRow>
             <VCol cols="12">
               <VTextField
-                v-model="form.username"
+                v-model="form.name"
                 label="Username"
                 :error-messages="userNameErrors"
-                @blur="v$.username.$touch"
-                @input="v$.username.$touch"
+                @blur="v$.name.$touch"
+                @input="v$.name.$touch"
               />
             </VCol>
             <VCol cols="12">
