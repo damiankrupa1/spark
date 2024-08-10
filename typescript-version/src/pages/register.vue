@@ -6,27 +6,25 @@ import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 
+import { axiosInstance } from '@/plugins/axios'
 import { useVuelidate } from '@vuelidate/core'
-import { email, required, sameAs } from '@vuelidate/validators'
+import { email, required } from '@vuelidate/validators'
 import { getCurrentInstance } from 'vue'
 
 const form = ref({
   username: '',
   email: '',
   password: '',
-  privacyPolicies: false,
 })
 
 const rules = {
   username: { required },
   email: { required, email },
   password: { required },
-  privacyPolicies: sameAs(true),
 }
 
 
 const app = getCurrentInstance()
-const axios = app!.appContext.config.globalProperties.$axios
 
 const v$ = useVuelidate(rules, form.value)
 
@@ -45,22 +43,31 @@ const userNameErrors = computed(() => {
   }
   return errors.map(error => error.$message)
 })
+const passwordErrors = computed(() => {
+  const errors = v$.value.password.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+const emailErrors = computed(() => {
+  const errors = v$.value.email.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
 
 const isPasswordVisible = ref(false)
 
 const handleSubmit = async () => {
-  // v$.value.$touch();
-  // if(v$.value.$invalid){
-  //   return;
-  // }
+  v$.value.$touch();
+  if(v$.value.$invalid){
+    return;
+  }
 
-  const res = axios.post("http://localhost:3000/v1/auth/register",form.value)
+  const res = axiosInstance.post("http://localhost:3000/v1/auth/register",form.value)
 
-
-  // const res = await fetch("http://localhost:3000/v1/auth/register",{
-  //   method: 'POST',
-  //   body: JSON.stringify(form.value)
-  // });
 }
 </script>
 
@@ -97,7 +104,7 @@ const handleSubmit = async () => {
         <VForm @submit.prevent="handleSubmit">
           <VRow>
             <VCol cols="12">
-              <VCTextField
+              <VTextField
                 v-model="form.username"
                 label="Username"
                 :error-messages="userNameErrors"
@@ -110,6 +117,9 @@ const handleSubmit = async () => {
                 v-model="form.email"
                 label="Email"
                 type="email"
+                :error-messages="emailErrors"
+                @blur="v$.email.$touch"
+                @input="v$.email.$touch"
               />
             </VCol>
             <VCol cols="12">
@@ -119,29 +129,16 @@ const handleSubmit = async () => {
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
+                :error-messages="passwordErrors"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                @blur="v$.password.$touch"
+                @input="v$.password.$touch"
               />
-              <div class="d-flex align-center mt-1 mb-4">
-                <VCheckbox
-                  id="privacy-policy"
-                  v-model="form.privacyPolicies"
-                  inline
-                />
-                <VLabel
-                  for="privacy-policy"
-                  style="opacity: 1;"
-                >
-                  <span class="me-1">I agree to</span>
-                  <a
-                    href="javascript:void(0)"
-                    class="text-primary"
-                  >privacy policy & terms</a>
-                </VLabel>
-              </div>
 
               <VBtn
                 block
                 type="submit"
+                class="mt-8"
               >
                 Sign up
               </VBtn>
