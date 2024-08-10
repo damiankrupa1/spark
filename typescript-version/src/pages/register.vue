@@ -2,9 +2,14 @@
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
 
-import { axiosInstance } from '@/plugins/axios'
+import { useNotification } from "@kyvg/vue3-notification"
 import { useVuelidate } from '@vuelidate/core'
 import { email, required } from '@vuelidate/validators'
+import { useAuth } from "vue-auth3"
+
+const { notify }  = useNotification();
+
+const auth = useAuth()
 
 const form = ref({
   name: '',
@@ -50,7 +55,28 @@ const handleSubmit = async () => {
     return;
   }
 
-  const res = axiosInstance.post("http://localhost:3000/v1/auth/register",form.value)
+  // const res = axiosInstance.post("http://localhost:3000/v1/auth/register",form.value)
+  console.log({...form.value})
+  try{
+    const response = await auth.register({
+      body: form.value,
+      baseURL: 'http://localhost:3000',
+      url: '/v1/auth/register',
+      data: {...form.value},
+      redirect: { name: "account-settings" },
+      remember: true,
+      staySignedIn: true,
+      autoLogin: true,
+      fetchUser: true,
+    })
+  } catch(error){
+    console.log(error)
+    notify({
+      title: "Error!",
+      text: error?.response?.data?.message ?? error.message,
+      type: "error"
+    })
+  }
 
 }
 </script>
