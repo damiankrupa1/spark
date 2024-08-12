@@ -65,7 +65,7 @@ const handleSubmit = async () => {
       autoLogin: true,
       fetchUser: false,
     })
-    console.log('response',response)
+    //to do move this to auth driver
     notify({
       title: "Success",
       text: "Register successful",

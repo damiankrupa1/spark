@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
+import { useTheme } from 'vuetify'
 
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
+import { useNotification } from "@kyvg/vue3-notification"
+import { useVuelidate } from '@vuelidate/core'
+import { email, required } from '@vuelidate/validators'
+import { useAuth } from "vue-auth3"
 
 const form = ref({
   email: '',
@@ -15,6 +19,8 @@ const form = ref({
 })
 
 const vuetifyTheme = useTheme()
+const auth = useAuth()
+const { notify }  = useNotification();
 
 const authThemeMask = computed(() => {
   return vuetifyTheme.global.name.value === 'light'
@@ -22,7 +28,61 @@ const authThemeMask = computed(() => {
     : authV1MaskDark
 })
 
+const rules = {
+  email: { required, email },
+  password: { required },
+}
+
+const v$ = useVuelidate(rules, form.value)
+
 const isPasswordVisible = ref(false)
+
+const passwordErrors = computed(() => {
+  const errors = v$.value.password.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+const emailErrors = computed(() => {
+  const errors = v$.value.email.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+
+const handleSubmit = async () => {
+  console.log(v$.value.$invalid)
+  v$.value.$touch();
+  if(v$.value.$invalid){
+    return;
+  }
+
+  try{
+    const response = await auth.login({
+      body: form.value,
+      url: '/v1/auth/login',
+      data: {...form.value},
+      redirect: { path: "dashboard" },
+      staySignedIn: true,
+      fetchUser: false,
+    })
+    //to do move this to auth driver
+    notify({
+      title: "Success",
+      text: "Login successful",
+      type: "success"
+    })
+  } catch(error){
+    notify({
+      title: "Error!",
+      text: error?.response?.data?.message ?? error.message,
+      type: "error"
+    })
+  }
+
+}
 </script>
 
 <template>
@@ -55,7 +115,7 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm @submit.prevent="handleSubmit">
           <VRow>
             <!-- email -->
             <VCol cols="12">
@@ -63,6 +123,9 @@ const isPasswordVisible = ref(false)
                 v-model="form.email"
                 label="Email"
                 type="email"
+                :error-messages="emailErrors"
+                @blur="v$.email.$touch"
+                @input="v$.email.$touch"
               />
             </VCol>
 
@@ -74,7 +137,10 @@ const isPasswordVisible = ref(false)
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
+                :error-messages="passwordErrors"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                @blur="v$.password.$touch"
+                @input="v$.password.$touch"
               />
 
               <!-- remember me checkbox -->
@@ -96,7 +162,6 @@ const isPasswordVisible = ref(false)
               <VBtn
                 block
                 type="submit"
-                to="/"
               >
                 Login
               </VBtn>

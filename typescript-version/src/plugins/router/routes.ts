@@ -8,8 +8,8 @@ export const routes = [
         path: 'dashboard',
         component: () => import('@/pages/dashboard.vue'),
         meta: {
-          // auth: true,
-          // redirect: '/login'
+          auth: true,
+          redirect: '/login'
         },
       },
       {
@@ -70,8 +70,7 @@ export const routes = [
         path: 'login',
         component: () => import('@/pages/login.vue'),
         meta: {
-          // auth: false,
-          // redirect: '/dashboard'
+          auth: false,
         },
       },
       {
@@ -79,16 +78,13 @@ export const routes = [
         component: () => import('@/pages/register.vue'),
         meta: {
           auth: false,
-          redirect: {path: '/login'},
-          forbiddenRedirect: {path: '/login'},
         },
       },
       {
         path: '/:pathMatch(.*)*',
         component: () => import('@/pages/[...error].vue'),
         meta: {
-          // auth: false,
-          // redirect: '/dashboard'
+          auth: false,
         },
       },
     ],
