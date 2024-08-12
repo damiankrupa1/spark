@@ -1,5 +1,31 @@
 <script setup lang="ts">
-import avatar1 from '@images/avatars/avatar-1.png'
+import { router } from "@/plugins/router/index";
+import avatar1 from '@images/avatars/avatar-1.png';
+import { useNotification } from "@kyvg/vue3-notification";
+import { useAuth } from "vue-auth3";
+
+const auth = useAuth()
+const { notify }  = useNotification();
+
+const handleLogout = async () => {
+
+  try{
+    const response = await auth.logout()
+    notify({
+      title: "Success",
+      text: "Register successful",
+      type: "success"
+    })
+    router.push({ path: 'login' })
+
+  } catch(error){
+    notify({
+      title: "Error!",
+      text: error?.response?.data?.message ?? error.message,
+      type: "error"
+    })
+  }
+}
 </script>
 
 <template>
@@ -110,7 +136,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem to="/login">
+          <VListItem @click="handleLogout">
             <template #prepend>
               <VIcon
                 class="me-2"
