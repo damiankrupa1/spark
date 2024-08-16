@@ -45,6 +45,7 @@ export const registerPlugins = (app: App) => {
   const imports = import.meta.glob<{ default: (app: App) => void }>(['../../plugins/*.{ts,js}', '../../plugins/*/index.{ts,js}'], { eager: true })
 
   const importPaths = Object.keys(imports).sort()
+  console.log(importPaths)
 
   importPaths.forEach(path => {
     const pluginImportModule = imports[path]

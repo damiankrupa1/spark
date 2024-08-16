@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
+import { useUserSessionStore } from '@/store/userSession'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
+import { useVuelidate } from '@vuelidate/core'
+import { email, required } from '@vuelidate/validators'
+import { useTheme } from 'vuetify'
 
 const form = ref({
   email: '',
@@ -15,6 +17,7 @@ const form = ref({
 })
 
 const vuetifyTheme = useTheme()
+const userSession = useUserSessionStore()
 
 const authThemeMask = computed(() => {
   return vuetifyTheme.global.name.value === 'light'
@@ -22,7 +25,39 @@ const authThemeMask = computed(() => {
     : authV1MaskDark
 })
 
+const rules = {
+  email: { required, email },
+  password: { required },
+}
+
+const v$ = useVuelidate(rules, form.value)
+
 const isPasswordVisible = ref(false)
+
+const passwordErrors = computed(() => {
+  const errors = v$.value.password.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+const emailErrors = computed(() => {
+  const errors = v$.value.email.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+
+const handleSubmit = async () => {
+  v$.value.$touch();
+  if(v$.value.$invalid){
+    return;
+  }
+  const send = {...form.value} as {email:string;password:string;remember?:boolean}
+  delete send.remember
+  await userSession.login(send)
+}
 </script>
 
 <template>
@@ -55,7 +90,7 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm @submit.prevent="handleSubmit">
           <VRow>
             <!-- email -->
             <VCol cols="12">
@@ -63,6 +98,9 @@ const isPasswordVisible = ref(false)
                 v-model="form.email"
                 label="Email"
                 type="email"
+                :error-messages="emailErrors"
+                @blur="v$.email.$touch"
+                @input="v$.email.$touch"
               />
             </VCol>
 
@@ -74,7 +112,10 @@ const isPasswordVisible = ref(false)
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
+                :error-messages="passwordErrors"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                @blur="v$.password.$touch"
+                @input="v$.password.$touch"
               />
 
               <!-- remember me checkbox -->
@@ -96,7 +137,6 @@ const isPasswordVisible = ref(false)
               <VBtn
                 block
                 type="submit"
-                to="/"
               >
                 Login
               </VBtn>

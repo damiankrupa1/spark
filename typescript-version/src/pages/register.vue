@@ -1,40 +1,42 @@
 <script setup lang="ts">
+import { useUserSessionStore } from '@/store/userSession'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { useTheme } from 'vuetify'
-
 import logo from '@images/logo.svg?raw'
-import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
-import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
-
 import { useVuelidate } from '@vuelidate/core'
-import { email, required, sameAs } from '@vuelidate/validators'
+import { email, required } from '@vuelidate/validators'
 
 const form = ref({
-  username: '',
+  name: '',
   email: '',
   password: '',
-  privacyPolicies: false,
 })
 
 const rules = {
-  username: { required },
+  name: { required },
   email: { required, email },
   password: { required },
-  privacyPolicies: sameAs(true),
 }
+
+const userSession = useUserSessionStore()
 
 const v$ = useVuelidate(rules, form.value)
 
-const vuetifyTheme = useTheme()
-
-const authThemeMask = computed(() => {
-  return vuetifyTheme.global.name.value === 'light'
-    ? authV1MaskLight
-    : authV1MaskDark
-})
-
 const userNameErrors = computed(() => {
-  const errors = v$.value.username.$errors;
+  const errors = v$.value.name.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+const passwordErrors = computed(() => {
+  const errors = v$.value.password.$errors;
+  if(!Array.isArray(errors)){
+    return [];
+  }
+  return errors.map(error => error.$message)
+})
+const emailErrors = computed(() => {
+  const errors = v$.value.email.$errors;
   if(!Array.isArray(errors)){
     return [];
   }
@@ -48,10 +50,7 @@ const handleSubmit = async () => {
   if(v$.value.$invalid){
     return;
   }
-  const res = await fetch("http://localhost:3000/v1/auth/register",{
-    method: 'POST',
-    body: JSON.stringify(form.value)
-  });
+  await userSession.register(form.value)
 }
 </script>
 
@@ -59,10 +58,6 @@ const handleSubmit = async () => {
   <!-- eslint-disable vue/no-v-html -->
 
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
-
-    <!--<VCTextField> 
-      <template #prepend="{id, reset}">asdf : {{ id }} {{  reset }}</template>
-    </VCTextField>-->
     <VCard
       class="auth-card pa-4 pt-7"
       max-width="448"
@@ -93,11 +88,11 @@ const handleSubmit = async () => {
           <VRow>
             <VCol cols="12">
               <VTextField
-                v-model="form.username"
+                v-model="form.name"
                 label="Username"
                 :error-messages="userNameErrors"
-                @blur="v$.username.$touch"
-                @input="v$.username.$touch"
+                @blur="v$.name.$touch"
+                @input="v$.name.$touch"
               />
             </VCol>
             <VCol cols="12">
@@ -105,6 +100,9 @@ const handleSubmit = async () => {
                 v-model="form.email"
                 label="Email"
                 type="email"
+                :error-messages="emailErrors"
+                @blur="v$.email.$touch"
+                @input="v$.email.$touch"
               />
             </VCol>
             <VCol cols="12">
@@ -114,29 +112,16 @@ const handleSubmit = async () => {
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
+                :error-messages="passwordErrors"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                @blur="v$.password.$touch"
+                @input="v$.password.$touch"
               />
-              <div class="d-flex align-center mt-1 mb-4">
-                <VCheckbox
-                  id="privacy-policy"
-                  v-model="form.privacyPolicies"
-                  inline
-                />
-                <VLabel
-                  for="privacy-policy"
-                  style="opacity: 1;"
-                >
-                  <span class="me-1">I agree to</span>
-                  <a
-                    href="javascript:void(0)"
-                    class="text-primary"
-                  >privacy policy & terms</a>
-                </VLabel>
-              </div>
 
               <VBtn
                 block
                 type="submit"
+                class="mt-8"
               >
                 Sign up
               </VBtn>
