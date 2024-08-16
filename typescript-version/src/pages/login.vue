@@ -1,7 +1,6 @@
 <script setup lang="ts">
+import { useUserSessionStore } from '@/store/userSession'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { useTheme } from 'vuetify'
-
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
@@ -9,6 +8,7 @@ import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useVuelidate } from '@vuelidate/core'
 import { email, required } from '@vuelidate/validators'
+import { useTheme } from 'vuetify'
 
 const form = ref({
   email: '',
@@ -17,6 +17,7 @@ const form = ref({
 })
 
 const vuetifyTheme = useTheme()
+const userSession = useUserSessionStore()
 
 const authThemeMask = computed(() => {
   return vuetifyTheme.global.name.value === 'light'
@@ -49,35 +50,11 @@ const emailErrors = computed(() => {
 })
 
 const handleSubmit = async () => {
-  console.log(v$.value.$invalid)
   v$.value.$touch();
   if(v$.value.$invalid){
     return;
   }
-
-  // try{
-  //   const response = await auth.login({
-  //     body: form.value,
-  //     url: '/v1/auth/login',
-  //     data: {...form.value},
-  //     redirect: { path: "dashboard" },
-  //     staySignedIn: true,
-  //     fetchUser: false,
-  //   })
-  //   //to do move this to auth driver
-  //   notify({
-  //     title: "Success",
-  //     text: "Login successful",
-  //     type: "success"
-  //   })
-  // } catch(error){
-  //   notify({
-  //     title: "Error!",
-  //     text: error?.response?.data?.message ?? error.message,
-  //     type: "error"
-  //   })
-  // }
-
+  await userSession.login(form.value)
 }
 </script>
 

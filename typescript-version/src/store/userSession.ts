@@ -39,11 +39,15 @@ export const useUserSessionStore = defineStore('userSession', {
       this.router.push({name: 'dashboard'})
     },
     async login(data:loginModel) {
-        const user:loginResponse = await axiosInstance.post(`/v1/auth/login`, data)    
+        const user:AxiosResponse<loginResponse> = await axiosInstance.post(`/v1/auth/login`, data)    
+        if(user.status !== 201){
+          return
+        }
 
-        this.user = user.user
-        this.token = user.tokens.access
-        setLoginData(user)
+        this.user = user.data.user
+        this.token = user.data.tokens.access
+        setLoginData(user.data)
+        this.router.push({name: 'dashboard'})
     },
     logout() {
         this.user = null
@@ -51,6 +55,7 @@ export const useUserSessionStore = defineStore('userSession', {
         localStorage.removeItem('user')
         localStorage.removeItem('token')
         localStorage.removeItem('tokens')
+        this.router.push({name: 'login'})
     }
   }
 })

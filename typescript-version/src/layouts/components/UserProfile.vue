@@ -1,24 +1,12 @@
 <script setup lang="ts">
+import { useUserSessionStore } from '@/store/userSession';
 import avatar1 from '@images/avatars/avatar-1.png';
 
-const handleLogout = async () => {
+const userSession = useUserSessionStore()
 
-  // try{
-  //   const response = await auth.logout()
-  //   notify({
-  //     title: "Success",
-  //     text: "Register successful",
-  //     type: "success"
-  //   })
-  //   router.push({ path: 'login' })
+const handleLogout = () => {
 
-  // } catch(error){
-  //   notify({
-  //     title: "Error!",
-  //     text: error?.response?.data?.message ?? error.message,
-  //     type: "error"
-  //   })
-  // }
+  userSession.logout()
 }
 </script>
 

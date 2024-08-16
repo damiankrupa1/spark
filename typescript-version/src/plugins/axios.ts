@@ -1,9 +1,11 @@
 import { router } from "@/plugins/router/index";
+import { useUserSessionStore } from '@/store/userSession';
 import { useNotification } from "@kyvg/vue3-notification";
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 import type { App } from 'vue';
 
 const { notify }  = useNotification();
+const userSession = useUserSessionStore()
 
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders
@@ -15,7 +17,6 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config): AdaptAxiosRequestConfig => {
-    console.log('here',config)
     const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -28,7 +29,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   response => {
-    console.log('here',response)
 
     notify({
       title: "Success",
@@ -45,9 +45,8 @@ axiosInstance.interceptors.response.use(
     })
     if (error.response) {
       if (error.response.status === 401) {
-        router.push({path: 'login'})
-      } else if (error.response.status === 404) {
-        router.push({path: '/:pathMatch(.*)*'})
+        userSession.logout();
+        router.push({name: 'login'})
       }
     }
     return Promise.reject(error);
