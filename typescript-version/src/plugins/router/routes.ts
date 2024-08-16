@@ -94,7 +94,6 @@ export const routes = [
         name: 'error',
         component: () => import('@/pages/[...error].vue'),
         meta: {
-          auth: false,
         },
       },
     ],

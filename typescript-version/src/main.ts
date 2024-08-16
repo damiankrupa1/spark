@@ -30,6 +30,10 @@ router.beforeEach(async (to,_,next) => {
     next({name:'dashboard'})
     return 
   }
+  if(to.meta.auth === false && userSession.isAuthenticated()){
+    next({name: 'dashboard'})
+    return
+  }
   next()
 })
 

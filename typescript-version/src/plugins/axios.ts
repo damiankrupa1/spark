@@ -1,5 +1,4 @@
 import { pinia } from '@/plugins/pinia';
-import { router } from "@/plugins/router/index";
 import { useUserSessionStore } from '@/store/userSession';
 import { useNotification } from "@kyvg/vue3-notification";
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
@@ -28,31 +27,6 @@ axiosInstance.interceptors.request.use(
   console.log('error',error)
 });
 
-axiosInstance.interceptors.response.use(
-  response => {
-
-    notify({
-      title: "Success",
-      type: "success"
-    })
-    return response;
-  },
-  error => {
-
-    notify({
-      title: "Error!",
-      text: error.message,
-      type: "error"
-    })
-    if (error.response) {
-      if (error.response.status === 401) {
-        userSession.logout();
-        router.push({name: 'login'})
-      }
-    }
-    return Promise.reject(error);
-  }
-);
 export default function (app: App) {
   app.use(  
     axiosInstance
