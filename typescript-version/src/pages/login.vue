@@ -54,7 +54,9 @@ const handleSubmit = async () => {
   if(v$.value.$invalid){
     return;
   }
-  await userSession.login(form.value)
+  const send = {...form.value} as {email:string;password:string;remember?:boolean}
+  delete send.remember
+  await userSession.login(send)
 }
 </script>
 

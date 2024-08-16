@@ -29,7 +29,7 @@
     "vue": "^3.3.4",
     "vue-flatpickr-component": "11.0.3",
     "vue-prism-component": "^2.0.0",
-    "vue-router": "^4.2.5",
+    "vue-router": "^4.4.3",
     "vue3-apexcharts": "^1.4.4",
     "vue3-perfect-scrollbar": "^1.6.1",
     "vue3-toastify": "^0.2.2",

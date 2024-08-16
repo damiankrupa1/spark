@@ -1,16 +1,18 @@
-import { axiosInstance } from '@/plugins/axios'
-import { loginModel, loginResponse, registerModel, registerResponse } from '@/types/user'
-import { AxiosResponse } from 'axios'
-import { defineStore } from 'pinia'
+import { axiosInstance } from '@/plugins/axios';
+import { router } from "@/plugins/router/index";
+import { loginModel, loginResponse, registerModel, registerResponse } from '@/types/user';
+import { AxiosResponse } from 'axios';
+import { defineStore } from 'pinia';
 
 const setLoginData = (loginData: registerResponse) => {
   localStorage.setItem('user', JSON.stringify(loginData.user))
-  localStorage.setItem('token', JSON.stringify(loginData.tokens.access))
+  localStorage.setItem('token', JSON.stringify(loginData.tokens.access.token))
   localStorage.setItem('tokens', JSON.stringify(loginData.tokens))
 }
 
 const getLocalStorageUser = (item = 'user') => {
   const data = localStorage.getItem(item) ?? null
+  // console.log(data)
   if(data === null){
     return data
   }
@@ -34,28 +36,41 @@ export const useUserSessionStore = defineStore('userSession', {
         return
       }
       this.user = user.data
-      this.token = user.data.tokens.access
+      this.token = user.data.tokens.access.token
       setLoginData(user.data)
-      this.router.push({name: 'dashboard'})
+      router.push({path: 'dashboard'})
     },
     async login(data:loginModel) {
         const user:AxiosResponse<loginResponse> = await axiosInstance.post(`/v1/auth/login`, data)    
-        if(user.status !== 201){
+
+        if(user.statusText.toLowerCase() !== 'ok'){
           return
         }
 
         this.user = user.data.user
-        this.token = user.data.tokens.access
+        // console.log('user.data.tokens.access.token',user.data.tokens.access)
+        this.token = user.data.tokens.access.token
+        // console.log('this.token',this.token)
         setLoginData(user.data)
-        this.router.push({name: 'dashboard'})
+        router.push({name: 'dashboard'})
+    },
+    isAuthenticated(){
+      console.log('this.token isAuthenticated',this.token)
+      if(this.token) {
+        return true
+      }
+      return false
     },
     logout() {
         this.user = null
         this.token = null
+        console.log('this.token',this.token)
         localStorage.removeItem('user')
         localStorage.removeItem('token')
         localStorage.removeItem('tokens')
-        this.router.push({name: 'login'})
+        // console.log('here')
+        // console.log(this.router)
+        router.push({name: 'login'})
     }
   }
 })
