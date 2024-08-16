@@ -30,7 +30,7 @@ export const useUserSessionStore = defineStore('userSession', {
   }),
   actions: {
     async register(data:registerModel){
-      const user:AxiosResponse<registerResponse> = await axiosInstance.post(`/v1/auth/register`, data)    
+      const user:AxiosResponse<registerResponse> = await axiosInstance.post(`/auth/register`, data)    
 
       if(user.status !== 201){
         return
@@ -41,21 +41,18 @@ export const useUserSessionStore = defineStore('userSession', {
       router.push({path: 'dashboard'})
     },
     async login(data:loginModel) {
-        const user:AxiosResponse<loginResponse> = await axiosInstance.post(`/v1/auth/login`, data)    
+        const user:AxiosResponse<loginResponse> = await axiosInstance.post(`/auth/login`, data)    
 
         if(user.statusText.toLowerCase() !== 'ok'){
           return
         }
 
         this.user = user.data.user
-        // console.log('user.data.tokens.access.token',user.data.tokens.access)
         this.token = user.data.tokens.access.token
-        // console.log('this.token',this.token)
         setLoginData(user.data)
         router.push({name: 'dashboard'})
     },
     isAuthenticated(){
-      console.log('this.token isAuthenticated',this.token)
       if(this.token) {
         return true
       }
@@ -64,12 +61,9 @@ export const useUserSessionStore = defineStore('userSession', {
     logout() {
         this.user = null
         this.token = null
-        console.log('this.token',this.token)
         localStorage.removeItem('user')
         localStorage.removeItem('token')
         localStorage.removeItem('tokens')
-        // console.log('here')
-        // console.log(this.router)
         router.push({name: 'login'})
     }
   }

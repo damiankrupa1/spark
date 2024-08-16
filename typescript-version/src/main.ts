@@ -18,6 +18,8 @@ registerPlugins(app)
 
 app.mount('#app')
 
+//todo refactor this
+
 const userSession = useUserSessionStore(pinia)
 
 router.beforeEach(async (to,_,next) => {

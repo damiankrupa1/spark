@@ -12,14 +12,15 @@ interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
 }
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:3000/v1',
+  // baseURL: import.meta.env.BASE_URL
 });
 
 axiosInstance.interceptors.request.use(
   (config): AdaptAxiosRequestConfig => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token.replace("\"", "")}`;
     }
     return config;
 },
