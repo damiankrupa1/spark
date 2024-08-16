@@ -27,7 +27,6 @@
     "prismjs": "^1.29.0",
     "roboto-fontface": "^0.10.0",
     "vue": "^3.3.4",
-    "vue-auth3": "^1.0.10",
     "vue-flatpickr-component": "11.0.3",
     "vue-prism-component": "^2.0.0",
     "vue-router": "^4.2.5",

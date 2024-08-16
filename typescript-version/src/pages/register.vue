@@ -1,15 +1,9 @@
 <script setup lang="ts">
+import { useUserSessionStore } from '@/store/userSession'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
-
-import { useNotification } from "@kyvg/vue3-notification"
 import { useVuelidate } from '@vuelidate/core'
 import { email, required } from '@vuelidate/validators'
-import { useAuth } from "vue-auth3"
-
-const { notify }  = useNotification();
-
-const auth = useAuth()
 
 const form = ref({
   name: '',
@@ -22,6 +16,8 @@ const rules = {
   email: { required, email },
   password: { required },
 }
+
+const userSession = useUserSessionStore()
 
 const v$ = useVuelidate(rules, form.value)
 
@@ -54,31 +50,7 @@ const handleSubmit = async () => {
   if(v$.value.$invalid){
     return;
   }
-
-  try{
-    const response = await auth.register({
-      body: form.value,
-      url: '/v1/auth/register',
-      data: {...form.value},
-      redirect: { path: "dashboard" },
-      staySignedIn: true,
-      autoLogin: true,
-      fetchUser: false,
-    })
-    //to do move this to auth driver
-    notify({
-      title: "Success",
-      text: "Register successful",
-      type: "success"
-    })
-  } catch(error){
-    notify({
-      title: "Error!",
-      text: error?.response?.data?.message ?? error.message,
-      type: "error"
-    })
-  }
-
+  await userSession.register(form.value)
 }
 </script>
 

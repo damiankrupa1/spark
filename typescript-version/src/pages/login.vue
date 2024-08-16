@@ -7,10 +7,8 @@ import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
-import { useNotification } from "@kyvg/vue3-notification"
 import { useVuelidate } from '@vuelidate/core'
 import { email, required } from '@vuelidate/validators'
-import { useAuth } from "vue-auth3"
 
 const form = ref({
   email: '',
@@ -19,8 +17,6 @@ const form = ref({
 })
 
 const vuetifyTheme = useTheme()
-const auth = useAuth()
-const { notify }  = useNotification();
 
 const authThemeMask = computed(() => {
   return vuetifyTheme.global.name.value === 'light'
@@ -59,28 +55,28 @@ const handleSubmit = async () => {
     return;
   }
 
-  try{
-    const response = await auth.login({
-      body: form.value,
-      url: '/v1/auth/login',
-      data: {...form.value},
-      redirect: { path: "dashboard" },
-      staySignedIn: true,
-      fetchUser: false,
-    })
-    //to do move this to auth driver
-    notify({
-      title: "Success",
-      text: "Login successful",
-      type: "success"
-    })
-  } catch(error){
-    notify({
-      title: "Error!",
-      text: error?.response?.data?.message ?? error.message,
-      type: "error"
-    })
-  }
+  // try{
+  //   const response = await auth.login({
+  //     body: form.value,
+  //     url: '/v1/auth/login',
+  //     data: {...form.value},
+  //     redirect: { path: "dashboard" },
+  //     staySignedIn: true,
+  //     fetchUser: false,
+  //   })
+  //   //to do move this to auth driver
+  //   notify({
+  //     title: "Success",
+  //     text: "Login successful",
+  //     type: "success"
+  //   })
+  // } catch(error){
+  //   notify({
+  //     title: "Error!",
+  //     text: error?.response?.data?.message ?? error.message,
+  //     type: "error"
+  //   })
+  // }
 
 }
 </script>
