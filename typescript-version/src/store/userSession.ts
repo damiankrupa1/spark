@@ -6,7 +6,7 @@ import { defineStore } from 'pinia';
 
 const setLoginData = (loginData: registerResponse) => {
   localStorage.setItem('user', JSON.stringify(loginData.user))
-  localStorage.setItem('token', JSON.stringify(loginData.tokens.access.token))
+  localStorage.setItem('token', loginData.tokens.access.token)
   localStorage.setItem('tokens', JSON.stringify(loginData.tokens))
 }
 
