@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(
   (config): AdaptAxiosRequestConfig => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token.replace("\"", "")}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 },
