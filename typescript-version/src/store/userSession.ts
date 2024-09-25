@@ -12,7 +12,6 @@ const setLoginData = (loginData: registerResponse) => {
 
 const getLocalStorageUser = (item = 'user') => {
   const data = localStorage.getItem(item) ?? null
-  // console.log(data)
   if(data === null){
     return data
   }
@@ -26,7 +25,7 @@ const getLocalStorageUser = (item = 'user') => {
 export const useUserSessionStore = defineStore('userSession', {
   state: () => ({
     user: getLocalStorageUser(),
-    token: getLocalStorageUser('token'),
+    token: localStorage.getItem('token'),
   }),
   actions: {
     async register(data:registerModel){

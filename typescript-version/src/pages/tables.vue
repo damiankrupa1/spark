@@ -1,55 +1,59 @@
 <script setup lang="ts">
-import { axiosInstance } from '@/plugins/axios'
-import DemoSimpleTableBasics from '@/views/pages/tables/DemoSimpleTableBasics.vue'
-import DemoSimpleTableDensity from '@/views/pages/tables/DemoSimpleTableDensity.vue'
-import DemoSimpleTableFixedHeader from '@/views/pages/tables/DemoSimpleTableFixedHeader.vue'
-import DemoSimpleTableHeight from '@/views/pages/tables/DemoSimpleTableHeight.vue'
-import DemoSimpleTableTheme from '@/views/pages/tables/DemoSimpleTableTheme.vue'
+import VCDataTable from '@/components/common/VCDataTable.vue';
+import { axiosInstance } from '@/plugins/axios';
+import { crudUser } from '@/types/Crud/crudUser';
+import { crudResponse } from '@/types/crud';
+import { AxiosResponse } from 'axios';
 
-const users = axiosInstance.get('/users')
+let loading = ref(false);
+let users = ref<AxiosResponse<crudResponse<crudUser>>>();
+
+const headers = ref([
+  {
+    title: 'Email',
+    key: 'email',
+  },
+  {
+    title: 'Name',
+    key: 'name',
+  },
+  {
+    title: 'Email_Verified',
+    key: 'isEmailVerified',
+  },
+  {
+    title: 'Role',
+    key: 'role',
+  },
+])
+
+const totalItems = computed(() => {
+  return users.value?.data.totalResults ?? 0;
+})
+
+const items = computed(() => {
+  return users.value?.data.results ?? [];
+})
+
+const loadItems = async () => {
+  loading.value = true;
+  users.value = await axiosInstance.get('/users');
+  loading.value = false;
+  return users;
+}
 </script>
 
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard title="Basic">
-        <DemoSimpleTableBasics />
-      </VCard>
-    </VCol>
-
-    <VCol cols="12">
-      <VCard title="Theme">
-        <VCardText>
-          use <code>theme</code> prop to switch table to the dark theme.
-        </VCardText>
-        <DemoSimpleTableTheme />
-      </VCard>
-    </VCol>
-
-    <VCol cols="12">
-      <VCard title="Density">
-        <VCardText>
-          You can show a dense version of the table by using the <code>density</code> prop.
-        </VCardText>
-        <DemoSimpleTableDensity />
-      </VCard>
-    </VCol>
-
-    <VCol cols="12">
-      <VCard title="Height">
-        <VCardText>
-          You can set the height of the table by using the <code>height</code> prop.
-        </VCardText>
-        <DemoSimpleTableHeight />
-      </VCard>
-    </VCol>
-
-    <VCol cols="12">
-      <VCard title="Fixed Header">
-        <VCardText>
-          You can fix the header of table by using the <code>fixed-header</code> prop.
-        </VCardText>
-        <DemoSimpleTableFixedHeader />
+      <VCard title="Users">
+        <VCDataTable 
+          :loading="loading"
+          :headers="headers"
+          :items-length="totalItems"
+          :items="items"
+          @update:options="loadItems"
+        />
       </VCard>
     </VCol>
   </VRow>
