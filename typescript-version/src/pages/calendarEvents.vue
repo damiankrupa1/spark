@@ -51,6 +51,17 @@ const loadItems = async () => {
   <VRow>
     <VCol cols="12">
       <VCard title="Calendar events">
+        <VRow justify="end" class="mb-5">
+          <VCol cols="2">
+            <VBtn
+              block
+              type="submit"
+              :to="{name: 'addCalendarEvents'}"
+            >
+              Add event
+            </VBtn>
+          </VCol>
+        </VRow>
         <VCDataTable 
           :loading="loading"
           :headers="headers"

@@ -41,6 +41,15 @@ export const routes = [
         },
       },
       {
+        path: 'calendar-events-add',
+        name: 'addCalendarEvents',
+        component: () => import('@/pages/calendar/calendarEventsAdd.vue'),
+        meta: {
+          auth: true,
+          redirect: '/login'
+        },
+      },
+      {
         path: 'typography',
         name: 'typography',
         component: () => import('@/pages/typography.vue'),
