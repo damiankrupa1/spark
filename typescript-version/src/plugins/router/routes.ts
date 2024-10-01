@@ -23,6 +23,24 @@ export const routes = [
         },
       },
       {
+        path: 'calendar',
+        name: 'calendar',
+        component: () => import('@/pages/calendar.vue'),
+        meta: {
+          auth: true,
+          redirect: '/login'
+        },
+      },
+      {
+        path: 'calendar-events',
+        name: 'calendarEvents',
+        component: () => import('@/pages/calendarEvents.vue'),
+        meta: {
+          auth: true,
+          redirect: '/login'
+        },
+      },
+      {
         path: 'typography',
         name: 'typography',
         component: () => import('@/pages/typography.vue'),

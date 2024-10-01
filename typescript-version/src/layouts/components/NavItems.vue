@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue';
+import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 </script>
 
 <template>
@@ -10,6 +10,20 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
       title: 'Account Settings',
       icon: 'ri-user-settings-line',
       to: '/account-settings',
+    }"
+  />
+  <VerticalNavLink
+    :item="{
+      title: 'Calendar',
+      icon: 'ri-calendar-view',
+      to: '/calendar',
+    }"
+  />
+  <VerticalNavLink
+    :item="{
+      title: 'Calendar events',
+      icon: 'ri-calendar-view',
+      to: '/calendar-events',
     }"
   />
 
