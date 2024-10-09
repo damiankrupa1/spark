@@ -7,14 +7,18 @@ import '@core/scss/template/index.scss';
 import { registerPlugins } from '@core/utils/plugins';
 import { useNotification } from "@kyvg/vue3-notification";
 import '@layouts/styles/index.scss';
+import dayjs from 'dayjs';
 import { createApp } from 'vue';
 import 'vue3-toastify/dist/index.css';
+
 
 const { notify }  = useNotification();
 
 const app = createApp(App)
 
 registerPlugins(app)
+
+app.provide('dayJS', dayjs)
 
 app.mount('#app')
 
@@ -41,7 +45,9 @@ router.beforeEach(async (to,_,next) => {
 
 axiosInstance.interceptors.response.use(
   response => {
-
+    if(response.config.method?.toLowerCase() === 'get'){
+      return response;
+    }
     notify({
       title: "Success",
       type: "success"

@@ -23,6 +23,7 @@
     "@websanova/vue-auth": "^4.2.1",
     "apexcharts": "3.37.0",
     "axios": "^1.7.3",
+    "dayjs": "^1.11.13",
     "pinia": "^2.1.7",
     "prismjs": "^1.29.0",
     "qalendar": "^3.8.1",
